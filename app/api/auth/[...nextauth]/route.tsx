@@ -14,12 +14,15 @@ const handler = NextAuth({
         async session({ session }) {
             if (session?.user) { // Check if session.user exists before accessing email
                 const sessionUser = await User.findOne({
-                  email: session.user.email,
+                    email: session.user.email,
                 });
                 session.user.id = sessionUser._id.toString();
-              } else {
+
+                return Promise.resolve(session);
+            } else {
                 console.log("No user found in session");
-              }
+                return session;
+            }
         },
 
         async signIn({ profile }) {
