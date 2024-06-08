@@ -1,6 +1,8 @@
 import Link from "@node_modules/next/link"
 
-export default function Form({type, post, setPost, submitting, handleSubmit}) {
+export default function Form({type, post, setPost, submitting, handleSubmit}: 
+    {type: any, post: any, setPost: any, submitting: any, handleSubmit: any}) 
+    {
     return (
         <section className="w-full max-w-full flex-start flex-col" >
             <h1 className="head_text text-left">

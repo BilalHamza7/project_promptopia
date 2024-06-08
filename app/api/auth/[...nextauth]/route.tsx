@@ -1,4 +1,4 @@
-import NextAuth from "@/node_modules/next-auth/index";
+import NextAuth from "next-auth";
 import GoogleProvider from 'next-auth/providers/google';
 import { connectToDB } from "@/utils/database";
 import User from "@/models/user";
@@ -23,29 +23,41 @@ const handler = NextAuth({
         //         console.log("No user found in session");
         //         return session;
         //     }
-        
-        async session({ session }) {
-            // store the user id from MongoDB to session
-            const sessionUser = await User.findOne({ email: session.user.email });
-            session.user.id = sessionUser._id.toString();
 
+        async session({ session }) {
+            if (session.user) {
+                const sessionUser = await User.findOne({ email: session.user.email });
+
+                if (sessionUser) {
+                    session.user.id = sessionUser._id.toString();
+                }
+            }
             return session;
         },
 
         async signIn({ profile }) {
             try {
+
+                if (!profile) {
+                    console.error("Profile is undefined");
+                    return false;
+                }
+
                 await connectToDB();
 
                 //check if a user already exists
                 const userExists = await User.findOne({
                     email: profile.email
                 });
+
                 //if not, create a new user
                 if (!userExists) {
-                    const newUser = await User.create({
+                    const username = profile.name ? profile.name.replace(" ", "").toLowerCase() : `user${Date.now()}`;
+                    const image = profile.picture || ""; 
+                    await User.create({
                         email: profile.email,
-                        username: profile.name.replace(" ", "").toLowerCase(),
-                        image: profile.picture,
+                        username: username,
+                        image: image,
                     });
                 }
 

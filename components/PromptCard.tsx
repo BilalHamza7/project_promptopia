@@ -10,6 +10,11 @@ export default function PromptCard({
     handleTagClick,
     handleEdit,
     handleDelete,
+}: {
+    post: any,
+    handleTagClick: any,
+    handleEdit: any,
+    handleDelete: any,
 }) {
 
     const [copied, setCopied] = useState("")

@@ -10,19 +10,16 @@ export default function Nav() {
 
     const { data: session } = useSession();
 
-    const [providers, setProviders] = useState(null);
+    const [providers, setProviders] = useState([]);
 
     const [toggleDropdown, settoggleDropdown] = useState(false);
 
     useEffect(() => {
-        const setUpProviders = async () => {
-            const response = await getProviders();
-
-            setProviders(response);
-        }
-
-        setUpProviders();
-    }, [])
+        (async () => {
+          const res = await getProviders();
+          if(res) setProviders(res);
+        })();
+      }, []);
 
     return (
         <nav className="flex-between w-full mb-16 pt-3">
