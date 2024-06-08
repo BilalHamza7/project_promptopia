@@ -8,7 +8,7 @@ declare module "next-auth" {
         } & DefaultSession["user"];
     }
 
-    interface Profile {
+    interface Profile extends NextAuthProfile {
         picture?: string;
     }
 }
