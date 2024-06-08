@@ -11,18 +11,25 @@ const handler = NextAuth({
         })
     ],
     callbacks: {
-        async session({ session }) {
-            if (session?.user) { // Check if session.user exists before accessing email
-                const sessionUser = await User.findOne({
-                    email: session.user.email,
-                });
-                session.user._id = sessionUser._id.toString();
+        // async session({ session }) {
+        //     if (session?.user) { // Check if session.user exists before accessing email
+        //         const sessionUser = await User.findOne({
+        //             email: session.user.email,
+        //         });
+        //         session.user.id = sessionUser._id.toString();
 
-                return Promise.resolve(session);
-            } else {
-                console.log("No user found in session");
-                return session;
-            }
+        //         return Promise.resolve(session);
+        //     } else {
+        //         console.log("No user found in session");
+        //         return session;
+        //     }
+        
+        async session({ session }) {
+            // store the user id from MongoDB to session
+            const sessionUser = await User.findOne({ email: session.user.email });
+            session.user.id = sessionUser._id.toString();
+
+            return session;
         },
 
         async signIn({ profile }) {
