@@ -10,16 +10,20 @@ export default function Nav() {
 
     const { data: session } = useSession();
 
-    const [providers, setProviders] = useState([]);
+    const [providers, setProviders] = useState(null);
 
     const [toggleDropdown, settoggleDropdown] = useState(false);
 
     useEffect(() => {
-        (async () => {
-          const res = await getProviders();
-          if(res) setProviders(res);
-        })();
-      }, []);
+        const setUpProviders = async () => {
+            const response = await getProviders();
+
+            // @ts-ignore
+            setProviders(response);
+        }
+
+        setUpProviders();
+    }, [])
 
     return (
         <nav className="flex-between w-full mb-16 pt-3">
@@ -43,13 +47,13 @@ export default function Nav() {
                             Create Post
                         </Link>
 
-                        <button type="button" onClick={signOut} className="outline_btn">
+                        <button type="button" onClick={() => signOut()} className="outline_btn">
                             Sign Out
                         </button>
 
                         <Link href="/profile">
                             <Image
-                                src={session?.user.image}
+                                src={session?.user.image ?? '/assets/images/logo.svg'}
                                 width={37}
                                 height={37}
                                 className="rounded-full"
@@ -59,7 +63,7 @@ export default function Nav() {
                     </div>
                 ) : (
                     <>
-                        {providers && Object.values(providers).map((provider) => (
+                        {providers && Object.values(providers).map((provider: any) => (
                             <button
                                 type="button"
                                 key={provider.name}
@@ -78,7 +82,7 @@ export default function Nav() {
                 {session?.user ? (
                     <div className="flex" >
                         <Image
-                            src={session?.user.image}
+                            src={session?.user.image ?? '/assets/images/logo.svg'}
                             width={37}
                             height={37}
                             className="rounded-full"
@@ -117,7 +121,7 @@ export default function Nav() {
                     </div>
                 ) : (
                     <>
-                        {providers && Object.values(providers).map((provider) => (
+                        {providers && Object.values(providers).map((provider: any) => (
                         <button
                             type="button"
                             key={provider.name}

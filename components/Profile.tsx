@@ -1,6 +1,6 @@
 import PromptCard from "./PromptCard"
 
-export default function Profile({ name, desc, data, handleEdit, handleDelete }) {
+export default function Profile({ name, desc, data, handleEdit, handleDelete }: { name: any, desc: any, data: any, handleEdit: any, handleDelete: any }) {
 
     return (
         <section className="w-full">
@@ -15,10 +15,11 @@ export default function Profile({ name, desc, data, handleEdit, handleDelete }) 
             </p>
 
             <div className="mt-10 prompt_layout">
-                {data.map((post) => (
+                {data.map((post: any) => (
                     <PromptCard
                         key={post._id}
                         post={post}
+                        handleTagClick={undefined}
                         handleEdit={() => handleEdit && handleEdit(post)}
                         handleDelete={() => handleDelete && handleDelete(post)
                         }
