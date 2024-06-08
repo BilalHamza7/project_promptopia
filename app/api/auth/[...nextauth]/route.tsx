@@ -3,6 +3,10 @@ import GoogleProvider from 'next-auth/providers/google';
 import { connectToDB } from "@/utils/database";
 import User from "@/models/user";
 
+interface Profile extends NextAuthProfile {
+    picture?: string;
+}
+
 const handler = NextAuth({
     providers: [
         GoogleProvider({
