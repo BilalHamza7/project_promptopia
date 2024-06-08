@@ -1,24 +1,29 @@
 'use client';
 
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "@node_modules/next/navigation";
 import Form from "@components/Form";
-import { useRouter } from "@node_modules/next/router";
 
 export default function EditPrompt() {
 
-    const router = useRouter();
-
+    
     const [submitting, setsubmitting] = useState(false);
     const [post, setpost] = useState({
         prompt: '',
         tag: '',
     });
 
-    const { id } = router.query;
+    const [promptId, setPromptId] = useState('');
 
     useEffect(() => {
+        const router = useRouter();
+        const searchParams = useSearchParams();
+        const id = searchParams.get('id');
+
+        if (id) setPromptId(id);
+        
         const getPromptDetails = async () => {
-            const response = await fetch(`/api/prompt/${id}`);
+            const response = await fetch(`/api/prompt/${promptId}`);
 
             const data = await response.json();
 
@@ -28,27 +33,28 @@ export default function EditPrompt() {
             })
         }
 
-        if (id) getPromptDetails()
-    }, [id])
-
+        getPromptDetails()
+    }, [promptId])
+    
 
     const updatePrompt = async (e: any) => {
         e.preventDefault();
         setsubmitting(true);
 
-        if (!id) return alert('Prompt ID not found!');
-
+        if(!promptId) return alert('Prompt ID not found!');
+        
         try {
-            const response = await fetch(`/api/prompt/${id}`,
-                {
-                    method: 'PATCH',
-                    body: JSON.stringify({
-                        prompt: post.prompt,
-                        tag: post.tag
-                    })
+            const response = await fetch(`/api/prompt/${promptId}`,
+            {
+                method: 'PATCH',
+                body: JSON.stringify({
+                    prompt: post.prompt,
+                    tag: post.tag
                 })
+            })
 
             if (response.ok) {
+                const router = useRouter();
                 router.push('/profile');
             }
         } catch (error) {
@@ -59,7 +65,7 @@ export default function EditPrompt() {
     }
 
     return (
-        <Form
+        <Form 
             type="Edit"
             post={post}
             setPost={setpost}
