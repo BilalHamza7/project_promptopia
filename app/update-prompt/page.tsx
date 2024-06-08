@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "@node_modules/next/navigation";
+import { useState, useEffect } from "react";
 import Form from "@components/Form";
+import { useRouter } from "@node_modules/next/router";
 
 export default function EditPrompt() {
 
@@ -14,12 +14,11 @@ export default function EditPrompt() {
         tag: '',
     });
 
-    const searchParams = useSearchParams();
-    const promptId = searchParams.get('id');
+    const { id } = router.query;
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            const response = await fetch(`/api/prompt/${promptId}`);
+            const response = await fetch(`/api/prompt/${id}`);
 
             const data = await response.json();
 
@@ -29,18 +28,18 @@ export default function EditPrompt() {
             })
         }
 
-        if (promptId) getPromptDetails()
-    }, [promptId])
+        if (id) getPromptDetails()
+    }, [id])
 
 
     const updatePrompt = async (e: any) => {
         e.preventDefault();
         setsubmitting(true);
 
-        if (!promptId) return alert('Prompt ID not found!');
+        if (!id) return alert('Prompt ID not found!');
 
         try {
-            const response = await fetch(`/api/prompt/${promptId}`,
+            const response = await fetch(`/api/prompt/${id}`,
                 {
                     method: 'PATCH',
                     body: JSON.stringify({
@@ -60,16 +59,12 @@ export default function EditPrompt() {
     }
 
     return (
-        <>
-            <Suspense>
-                <Form
-                    type="Edit"
-                    post={post}
-                    setPost={setpost}
-                    submitting={submitting}
-                    handleSubmit={updatePrompt}
-                />
-            </Suspense>
-        </>
+        <Form
+            type="Edit"
+            post={post}
+            setPost={setpost}
+            submitting={submitting}
+            handleSubmit={updatePrompt}
+        />
     )
 };
