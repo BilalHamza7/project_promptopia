@@ -43,8 +43,6 @@ const handler = NextAuth({
                     return false;
                 }
 
-                console.log('Profile:', profile); // Log the profile object
-
                 await connectToDB();
 
                 const { email, name, picture } = profile as { email: string; name: string; picture: string };
