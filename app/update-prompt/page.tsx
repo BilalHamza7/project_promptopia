@@ -18,23 +18,27 @@ export default function EditPrompt() {
     const searchParams = useSearchParams();
 
     useEffect(() => {
+
         const id = searchParams.get('id');
         if (id) setPromptId(id);
-    }, [searchParams]);
-    
-    useEffect(() => {
+
         if (!promptId) return;
-    
+
         const getPromptDetails = async () => {
-            const response = await fetch(`/api/prompt/${promptId}`);
-            const data = await response.json();
-    
-            setpost({
-                prompt: data.prompt,
-                tag: data.tag,
-            });
+            try {
+                const response = await fetch(`/api/prompt/${promptId}`);
+                const data = await response.json();
+
+                setpost({
+                    prompt: data.prompt,
+                    tag: data.tag,
+                });
+            } catch (error) {
+                console.log(error);
+            }
+
         }
-    
+
         getPromptDetails();
     }, [promptId]);
 
@@ -68,7 +72,7 @@ export default function EditPrompt() {
 
     return (
         post.prompt ? (
-            <Form 
+            <Form
                 type="Edit"
                 post={post}
                 setPost={setpost}
