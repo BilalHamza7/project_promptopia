@@ -17,7 +17,8 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body>
-                <Provider session={undefined}>
+                {/* State Management (Provider) session is not yet created hence undefined initially */}
+                <Provider session={undefined}> 
                     <div className='main'>
                         <div className='gradient' />
                     </div>
