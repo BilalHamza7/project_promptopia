@@ -9,7 +9,7 @@ export default function Home() {
             </h1>
 
             <p className="desc text-center">
-                HELLOPromptopia is an open-source AI prompting tool for modern world to discover, create and share creative promts
+                Promptopia is an open-source AI prompting tool for modern world to discover, create and share creative promts
             </p>
 
             <Feed />
